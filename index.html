@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Story Divider Pro</title>
+        <style>
+            :root {
+                --primary: #2a2a72;
+                --secondary: #009ffd;
+                --background: #f8f9fa;
+                --text: #2c3e50;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family: "Segoe UI", system-ui, sans-serif;
+                line-height: 1.6;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                color: var(--text);
+                min-height: 100vh;
+                padding: 2rem;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 2rem auto;
+                background: white;
+                padding: 2.5rem;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            }
+
+            h1 {
+                color: var(--primary);
+                margin-bottom: 1.5rem;
+                font-weight: 700;
+                text-align: center;
+                position: relative;
+            }
+
+            h1::after {
+                content: "";
+                width: 60px;
+                height: 4px;
+                background: var(--secondary);
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: 2px;
+            }
+
+            .input-group {
+                margin-bottom: 2rem;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: var(--primary);
+                font-weight: 500;
+            }
+
+            textarea {
+                width: 100%;
+                height: 200px;
+                padding: 1rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-size: 1rem;
+                resize: vertical;
+                transition: border-color 0.3s ease;
+            }
+
+            textarea:focus {
+                outline: none;
+                border-color: var(--secondary);
+                box-shadow: 0 0 0 3px rgba(0, 159, 253, 0.2);
+            }
+
+            input[type="number"] {
+                width: 100%;
+                padding: 0.8rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-size: 1rem;
+                transition: border-color 0.3s ease;
+            }
+
+            input[type="number"]:focus {
+                outline: none;
+                border-color: var(--secondary);
+                box-shadow: 0 0 0 3px rgba(0, 159, 253, 0.2);
+            }
+
+            button {
+                background: linear-gradient(
+                    45deg,
+                    var(--primary),
+                    var(--secondary)
+                );
+                color: white;
+                padding: 1rem 2rem;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition:
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
+                width: 100%;
+                letter-spacing: 0.5px;
+            }
+
+            button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0, 159, 253, 0.3);
+            }
+
+            .result {
+                margin-top: 2rem;
+            }
+
+            .section {
+                background: var(--background);
+                border-left: 4px solid var(--secondary);
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+                border-radius: 8px;
+                position: relative;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            }
+
+            .section-number {
+                position: absolute;
+                top: -12px;
+                left: 6px;
+                background: var(--secondary);
+                color: white;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+
+            .copy-btn {
+                background: rgba(255, 255, 255, 0.9);
+                color: var(--primary);
+                padding: 0.5rem 1rem;
+                border: 1px solid var(--primary);
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                backdrop-filter: blur(2px);
+            }
+
+            .copy-btn:hover {
+                background: var(--primary);
+                color: white;
+                transform: translateY(-1px);
+            }
+
+            .error {
+                color: #dc3545;
+                padding: 1rem;
+                background: #f8d7da;
+                border-radius: 8px;
+                margin: 1rem 0;
+                border: 1px solid #f5c6cb;
+            }
+
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+
+            .copy-status {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4caf50;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                display: none;
+                animation: fadeOut 1s 2s forwards;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+            }
+
+            .copy-status.error {
+                background: #dc3545;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>📖 Story Divider Pro</h1>
+
+            <div class="input-group">
+                <label for="storyInput">Your Story:</label>
+                <textarea
+                    id="storyInput"
+                    placeholder="Once upon a time..."
+                    spellcheck="false"
+                ></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="charLimit">Characters per Section:</label>
+                <input
+                    type="number"
+                    id="charLimit"
+                    placeholder="Enter character limit..."
+                    min="100"
+                    value="500"
+                />
+            </div>
+
+            <button onclick="divideStory()">Divide Story ✂️</button>
+
+            <div class="result" id="result"></div>
+        </div>
+
+        <div class="copy-status" id="copyStatus">Copied to clipboard!</div>
+
+        <script>
+            function divideStory() {
+                const story = document.getElementById("storyInput").value;
+                const charLimit = parseInt(
+                    document.getElementById("charLimit").value,
+                );
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = "";
+
+                if (!story || !charLimit || charLimit < 100) {
+                    resultDiv.innerHTML = `
+                    <div class="error">
+                        Please enter a valid story and character limit (minimum 100 characters).
+                    </div>
+                `;
+                    return;
+                }
+
+                let remainingText = story;
+                const sections = [];
+
+                while (remainingText.length > 0) {
+                    let chunk = remainingText.substring(0, charLimit);
+                    let lastBreak = Math.max(
+                        chunk.lastIndexOf("\n\n"),
+                        chunk.lastIndexOf("\n"),
+                        chunk.lastIndexOf(". "),
+                    );
+
+                    if (lastBreak > 0 && remainingText.length > charLimit) {
+                        chunk = chunk.substring(0, lastBreak + 1);
+                        remainingText = remainingText.substring(lastBreak + 1);
+                    } else {
+                        remainingText = remainingText.substring(chunk.length);
+                    }
+
+                    sections.push(chunk);
+                }
+
+                sections.forEach((section, index) => {
+                    const sectionDiv = document.createElement("div");
+                    sectionDiv.className = "section";
+                    sectionDiv.innerHTML = `
+                    <div class="section-number">${index + 1}</div>
+                    <div class="section-content">${section}</div>
+                `;
+
+                    const copyButton = document.createElement("button");
+                    copyButton.className = "copy-btn";
+                    copyButton.textContent = "📋 Copy";
+
+                    copyButton.onclick = async () => {
+                        try {
+                            await navigator.clipboard.writeText(section);
+                            showCopyStatus();
+                            copyButton.textContent = "✅ Copied!";
+                            setTimeout(() => {
+                                copyButton.textContent = "📋 Copy";
+                            }, 2000);
+                        } catch (err) {
+                            console.error("Copy failed:", err);
+                            showCopyStatus(
+                                "❌ Copy failed! Check permissions",
+                                true,
+                            );
+                        }
+                    };
+
+                    sectionDiv.appendChild(copyButton);
+                    resultDiv.appendChild(sectionDiv);
+                });
+            }
+
+            function showCopyStatus(
+                message = "Copied to clipboard!",
+                isError = false,
+            ) {
+                const status = document.getElementById("copyStatus");
+                status.textContent = message;
+                status.className = `copy-status ${isError ? "error" : ""}`;
+                status.style.display = "block";
+                setTimeout(() => {
+                    status.style.display = "none";
+                }, 3000);
+            }
+        </script>
+    </body>
+</html>
